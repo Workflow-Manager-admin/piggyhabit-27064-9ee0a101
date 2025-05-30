@@ -1,38 +1,46 @@
 :root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
+  --primary: #FBC02D;
+  --secondary: #FFF9C4;
+  --accent: #388E3C;
+  --red-remove: #EF5350;
+  --bg-darkest: #181818;
+  --bg-dark: #232323;
+  --bg-container: #222;
+  --border-dark: #232323;
+  --border-primary: #FBC02D22;
+  --text-main: #fff;
+  --text-secondary: rgba(255,255,255,0.7);
+  --text-muted: rgba(255,255,255,0.45);
+  --text-disabled: rgba(255,255,255,0.28);
 }
 
-body {
-  margin: 0;
+/* GENERAL BODY + DARK THEME */
+body, .app {
+  background: var(--bg-darkest);
+  color: var(--text-main);
   font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: var(--kavia-dark);
-  color: var(--text-color);
+  margin: 0;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* APP CONTAINER */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* NAVBAR + HEADER */
 .navbar {
-  background-color: var(--kavia-dark);
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-darkest);
+  padding: 16px 0;
   position: fixed;
   top: 0;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 100;
+  left: 0; right: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 110;
 }
 
 .logo {
@@ -41,12 +49,16 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.3px;
 }
 
 .logo-symbol {
-  color: var(--kavia-orange);
+  color: var(--primary);
+  font-size: 2rem;
+  margin-right: 0.5rem;
 }
 
+/* UTILITY CONTAINER */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -55,54 +67,269 @@ body {
   box-sizing: border-box;
 }
 
-.hero {
-  padding-top: 120px;
-  padding-bottom: 64px;
-  text-align: center;
+@media (max-width: 600px) {
+  .container {
+    padding: 0 7px;
+  }
+}
+
+/* PIGGY + TOTAL SUMMARY CARD */
+.piggy-summary {
+  background: var(--bg-dark);
+  border-radius: 20px;
+  padding: 32px 20px 24px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  box-shadow: 0 2px 20px 0 rgba(0,0,0,0.12);
+  margin-bottom: 2rem;
 }
 
-.subtitle {
-  color: var(--kavia-orange);
-  font-weight: 500;
-  font-size: 1.1rem;
+.piggy-emoji {
+  font-size: 5rem;
+  color: var(--primary);
+  text-shadow: 0 2px 8px #0004;
+  margin-bottom: 12px;
 }
 
-.title {
-  font-size: 3.5rem;
+/* MAIN TOTAL VALUE */
+.savings-total {
+  font-size: 2rem;
   font-weight: 600;
-  line-height: 1.2;
+  color: var(--primary);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.savings-label {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+/* SECTION FORMS / FIELDS */
+form[aria-label="Add Savings"],
+form[aria-label="Remove Savings"] {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+form[aria-label="Remove Savings"] {
+  margin-bottom: 1.5rem;
+}
+
+input[type="number"] {
+  flex: 3 1 120px;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+  border-color: var(--primary);
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  padding: 8px 10px;
+  outline: none;
+  margin-bottom: 5px;
+  box-shadow: none;
+  transition: border-color 0.18s cubic-bezier(.28,.2,.38,1);
+}
+input[type="number"]:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+input[type="number"][aria-label="Amount to remove"] {
+  margin-bottom: 0;
+}
+
+/* BUTTONS */
+.btn {
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1.07rem;
+  border: none;
+  padding: 10px 20px;
+  transition: background 0.18s, box-shadow 0.15s;
+  cursor: pointer;
+  outline: none;
+  background: var(--primary);
+  color: #222;
+  min-width: 105px;
+  box-shadow: 0 2px 12px 0 #0002;
+}
+
+.btn[disabled], .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-accent {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+
+.btn:hover, .btn:focus {
+  filter: brightness(1.13) drop-shadow(0 1px 8px #0004);
+}
+
+.btn-accent:hover, .btn-accent:focus {
+  filter: brightness(1.06);
+}
+
+/* SAVINGS GOAL FORM */
+form[aria-label="Set Savings Goal"] {
+  background: var(--bg-darkest);
+  border-radius: 10px;
+  padding: 16px 16px 20px 16px;
+  margin-bottom: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 1px 8px 0 rgba(0,0,0,0.10);
+}
+
+.savings-goal-label {
+  font-size: 1.12rem;
+  color: var(--secondary);
+  margin-bottom: 6px;
+}
+
+.savings-goal-bar-container {
+  width: 100%;
+  background: var(--bg-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 18px;
+  margin: 12px 0;
+  border: 1.5px solid var(--border-primary);
+}
+.savings-goal-bar {
+  background: var(--primary);
+  height: 100%;
+  transition: width 0.45s cubic-bezier(0.77,0,0.18,1);
+}
+
+.savings-goal-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-main);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  margin-top: -3px;
+}
+
+/* TRANSACTION HISTORY */
+.transaction-history {
+  background: var(--bg-container);
+  border-radius: 14px;
+  padding: 17px 12px 17px 18px;
+  min-height: 120px;
+  max-height: 256px;
+  overflow-y: auto;
+  box-shadow: 0 1px 8px 0 rgba(0,0,0,0.10);
+}
+.transaction-history-title {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 1.13rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.1px;
+}
+.transaction-history-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
-
-.description {
-  font-size: 1.1rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin-bottom: 16px;
+.transaction-history-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px dotted #393939;
+  font-size: 1.04rem;
 }
-
-.btn {
-  background-color: var(--kavia-orange);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 1rem;
+.transaction-history-list li:last-child {
+  border-bottom: none;
+}
+.transaction-amount-add {
+  color: var(--accent);
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+}
+.transaction-amount-remove {
+  color: var(--red-remove);
+  font-weight: 600;
+}
+.transaction-type-badge {
+  font-size: 0.97rem;
+  font-weight: 400;
+  border-radius: 6px;
+  padding: 1.5px 8px;
+  min-width: 58px;
+  text-align: center;
+  margin-left: 10px;
+  background: #388E3C44;
+  color: var(--accent);
+}
+.transaction-type-badge.remove {
+  background: #EF535037;
+  color: var(--red-remove);
+}
+.transaction-meta {
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.65);
+  margin-left: 1.2em;
 }
 
-.btn:hover {
-  background-color: #FF8B4D;
+/* NO TRANSACTIONS MESSAGE */
+.transaction-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 10px 0;
 }
 
-.btn-large {
-  padding: 12px 24px;
-  font-size: 1.1rem;
+/* FOOTER */
+footer {
+  color: var(--text-disabled);
+  font-size: 0.97rem;
+  text-align: center;
+  padding: 22px 0 10px 0;
+}
+
+footer .footer-mvp {
+  color: var(--primary);
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 500px) {
+  .container {
+    max-width: 99vw;
+    padding: 0 2px;
+  }
+  .piggy-summary,
+  form[aria-label="Set Savings Goal"] {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+  }
+  .transaction-history {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+  }
+}
+
+/* Utility: visually hidden, accessibility, focus outline for tabbing */
+.visually-hidden {
+  position: absolute;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* Focus outline for accessibility */
+input:focus, button:focus, .btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1.5px;
 }
