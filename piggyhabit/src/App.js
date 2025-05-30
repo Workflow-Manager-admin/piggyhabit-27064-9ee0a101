@@ -3,7 +3,7 @@ import './App.css';
 
 import PiggyBankDisplay from './PiggyBankDisplay';
 import AddRemoveControls from './AddRemoveControls';
-import SavingsGoal from './SavingsGoal';
+import SavingsGoalsManager from './SavingsGoal';
 import TransactionHistory from './TransactionHistory';
 
 // PUBLIC_INTERFACE
@@ -15,6 +15,10 @@ function App() {
   const [addAmount, setAddAmount] = useState('');
   const [removeAmount, setRemoveAmount] = useState('');
   const [goalInput, setGoalInput] = useState(goal);
+
+  // Savings Goals Feature State
+  const [goals, setGoals] = useState([]); // Always an array
+  const [selectedGoalId, setSelectedGoalId] = useState(null);
 
   // Colors - as per requirements
   const colors = {
@@ -111,16 +115,98 @@ function App() {
           />
 
           {/* Goal & Progress Section */}
-          <SavingsGoal
-            goalInput={goalInput}
-            setGoalInput={setGoalInput}
-            handleGoalChange={handleGoalChange}
-            goal={goal}
-            savings={savings}
-            progress={progress}
-            formatCurrency={formatCurrency}
-            colors={colors}
-          />
+          <section>
+            <div style={{marginBottom: 18}}>
+              {/* Simple progress/legacy goal if you wish; or just SavingsGoalsManager for now */}
+              <form
+                aria-label="Set Savings Goal"
+                onSubmit={handleGoalChange}
+                style={{
+                  background: '#181818',
+                  borderRadius: '10px',
+                  padding: '16px 16px 20px 16px',
+                  marginBottom: '1.8rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  boxShadow: '0 1px 8px 0 rgba(0,0,0,0.10)'
+                }}
+              >
+                <label htmlFor="goal-input" className="savings-goal-label" style={{fontSize:'1.12rem', color:colors.secondary, marginBottom: 6}}>Savings Goal (Quick set)</label>
+                <div style={{display:'flex', alignItems:'center', gap:8, width:'100%'}}>
+                  <input
+                    id="goal-input"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="Enter savings goal"
+                    value={goalInput}
+                    onChange={e => setGoalInput(e.target.value)}
+                    style={{
+                      borderRadius: '6px',
+                      border: `1px solid ${colors.primary}60`,
+                      background: '#232323',
+                      color: '#fff',
+                      fontSize: '1.1rem',
+                      padding: '7.5px 10px',
+                      outline: 'none',
+                      width: '120px',
+                      marginRight: '10px'
+                    }}
+                  />
+                  <button className="btn" type="submit" style={{
+                    borderRadius: '6px',
+                    background: colors.primary,
+                    color: '#222',
+                    fontWeight: 600,
+                    fontSize: '1.05rem',
+                    padding: '7px 12px',
+                    minWidth: '70px'
+                  }}>Set Goal</button>
+                </div>
+                <div className="savings-goal-bar-container" style={{
+                  width:'100%',
+                  background:'#232323',
+                  borderRadius:'8px',
+                  overflow:'hidden',
+                  height:'18px',
+                  margin: '12px 0',
+                  border: '1.5px solid #FBC02D22'
+                }}>
+                  <div className="savings-goal-bar" style={{
+                    background: colors.primary,
+                    width: `${progress}%`,
+                    height: '100%',
+                    transition: 'width 0.45s cubic-bezier(0.77,0,0.18,1)'
+                  }}/>
+                </div>
+                <div className="savings-goal-info" style={{
+                  width:'100%',
+                  display:'flex',
+                  justifyContent:'space-between',
+                  color:colors.primary,
+                  fontSize:'0.98rem',
+                  fontWeight:500,
+                  letterSpacing:'0.1px',
+                  marginTop:'-3px'
+                }}>
+                  <span>${formatCurrency(savings)}</span>
+                  <span>{progress.toFixed(1)}%</span>
+                  <span>Goal: ${formatCurrency(goal)}</span>
+                </div>
+              </form>
+            </div>
+            {/* Modern: goals feature */}
+            <SavingsGoalsManager
+              goals={goals}
+              setGoals={setGoals}
+              selectedGoalId={selectedGoalId}
+              setSelectedGoalId={setSelectedGoalId}
+              colors={colors}
+              formatCurrency={formatCurrency}
+              savings={savings}
+            />
+          </section>
 
           {/* Transaction History */}
           <TransactionHistory
