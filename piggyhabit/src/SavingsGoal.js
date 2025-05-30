@@ -15,9 +15,21 @@ function defaultGoal() {
   };
 }
 
+/**
+ * SavingsGoalsManager displays and allows editing/adding of savings goals.
+ *
+ * @param {object[]} goals - Array of goal objects. If undefined/null, treated as [].
+ * @param {function} setGoals - Function to update goals state.
+ * @param {string|null} selectedGoalId - The id of the currently selected goal.
+ * @param {function} setSelectedGoalId - Setter for selected goal.
+ * @param {function} updateGoalSaved - Function to update the saved amount for a goal (optional, can be ignored if not used).
+ * @param {object} colors - The color palette for themeing.
+ * @param {function} formatCurrency - Function to format currency numbers.
+ * @param {number} savings - The current total savings, for display.
+ */
 // PUBLIC_INTERFACE
 function SavingsGoalsManager({
-  goals,
+  goals = [], // Default to empty array if undefined/null
   setGoals,
   selectedGoalId,
   setSelectedGoalId,
@@ -26,12 +38,14 @@ function SavingsGoalsManager({
   formatCurrency,
   savings,
 }) {
+  // Defensive fallback: if somehow goals is still not an array, treat as empty
+  const safeGoals = Array.isArray(goals) ? goals : [];
   const [editingGoal, setEditingGoal] = useState(null); // null or goal obj being edited
   const [newGoal, setNewGoal] = useState(defaultGoal());
   const [editDraft, setEditDraft] = useState(null);
 
   // Priority helpers
-  const orderedGoals = [...goals].sort((a, b) => a.priority - b.priority);
+  const orderedGoals = [...safeGoals].sort((a, b) => a.priority - b.priority);
 
   // PUBLIC_INTERFACE
   function handleGoalFieldChange(e, goalObj, setGoalObj) {
