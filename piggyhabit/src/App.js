@@ -33,10 +33,16 @@ function App() {
   // PUBLIC_INTERFACE
   function handleAddSavings(e) {
     e.preventDefault();
+    // Accept only positive numbers with at most two decimals
     const value = parseFloat(addAmount);
-    if (!isNaN(value) && value > 0) {
-      setSavings((prev) => prev + value);
-      setHistory((prev) => [
+    if (
+      !isNaN(value) &&
+      value > 0 &&
+      // Check: at most two decimal digits (for realistic amounts)
+      /^\d+(\.\d{1,2})?$/.test(addAmount.trim())
+    ) {
+      setSavings(prev => prev + value);
+      setHistory(prev => [
         { type: 'add', amount: value, timestamp: new Date() },
         ...prev,
       ]);
